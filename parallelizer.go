@@ -7,13 +7,13 @@ import (
 	"github.com/paquetes/disaster"
 )
 
-// Group goroutine池
+// Group goroutine pool
 type Group struct {
 	queue chan int
 	wg    *sync.WaitGroup
 }
 
-// Add 添加任务
+// Add task
 func (g *Group) Add(delta int) {
 	for i := 0; i < delta; i++ {
 		g.queue <- 1
@@ -26,23 +26,23 @@ func (g *Group) Add(delta int) {
 	g.wg.Add(delta)
 }
 
-// Done 任务完成
+// Done
 func (g *Group) Done() {
 	<-g.queue
 	g.wg.Done()
 }
 
-// Wait 等待任务完成
+// Wait task complete
 func (g *Group) Wait() {
 	g.wg.Wait()
 }
 
-// Close 关闭队列
+// Close
 func (g *Group) Close() {
 	close(g.queue)
 }
 
-// New 创建goroutine池
+// New goroutine pool
 func New(size int) *Group {
 	if size <= 0 {
 		size = 1
@@ -54,7 +54,7 @@ func New(size int) *Group {
 	}
 }
 
-// Parallelize 并发执行给定任务
+// Parallelize
 func Parallelize(maxWorkers int, callback func(pg *Group)) {
 	defer disaster.Catch()
 
